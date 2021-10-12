@@ -99,17 +99,17 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 			//changed(); // notify all observers
 			//((AbstractObservableResource)(MyObserverResource_Modified.this)).notifyChange(new String("kalloooo!"+int_mytask_used).getBytes(),Code.C205_CONTENT);
 			//MyObserverResource_Modified.this.mynotifyChange(new String("kalloooo!"+int_mytask_used).getBytes(CoapConstants.DEFAULT_CHARSET),MediaTypes.CT_TEXT_PLAIN);
-			mynotifyChange(new String("kalloooo!"+int_mytask_used).getBytes(CoapConstants.DEFAULT_CHARSET),MediaTypes.CT_TEXT_PLAIN);
+			myNotifyChange(new String("kalloooo!"+int_mytask_used).getBytes(CoapConstants.DEFAULT_CHARSET),MediaTypes.CT_TEXT_PLAIN);
 		}
 	}
 
 
 
 	// ref: java-coap/coap-core/src/main/java/com/mbed/coap/observe/SimpleObservableResource.java
-	public void mynotifyChange(byte[] bytes, Short c205Content) {
+	public void myNotifyChange(byte[] bytes, Short c205Content) {
 		// TODO Auto-generated method stub
 		try {
-			super.notifyChange(bytes, c205Content);
+			notifyChange(bytes, c205Content);
 		} catch (CoapException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
