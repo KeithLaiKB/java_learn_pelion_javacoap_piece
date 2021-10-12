@@ -1,4 +1,4 @@
-package com.learn.pleion_javacoap.client.mydemo;
+package com.learn.pleion_javacoap.client;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -8,7 +8,7 @@ import com.mbed.coap.client.CoapClientBuilder;
 import com.mbed.coap.exception.CoapException;
 import com.mbed.coap.packet.CoapPacket;
 
-public class TestMain_Synchronous {
+public class TestMain_Simple {
 	public static void main(String[] args) {
 		// 如果想要ctrl+鼠标右键看更多信息, 它貌似看不了, 
 		// 它需要你去把github源码下载下来, 然后external folder过去 

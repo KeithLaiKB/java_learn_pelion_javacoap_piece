@@ -8,6 +8,11 @@ import com.mbed.coap.utils.CoapResource;
 public class MyResource extends CoapResource {
     private String body="Hello World";
     
+    public MyResource() {
+        // restricted instantiation rights\
+    	super();
+    }
+    
     @Override
     public void get(CoapExchange ex) throws CoapCodeException {
         ex.setResponseBody("Hello World");
