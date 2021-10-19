@@ -23,6 +23,8 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		super(coapServer);
 		// TODO Auto-generated constructor stub
 		//
+		//
+		this.setConNotifications(false);		// configure the notification type to NONs, 如果不写这个默认的是 CON
 		//----------------------------------------
 		//
 		// schedule a periodic update task, otherwise let events call changed()
@@ -124,6 +126,7 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
      * @param body new payload in bytes
      * @throws CoapException coap exception
      */
+	// ref: java-coap/coap-core/src/main/java/com/mbed/coap/observe/SimpleObservableResource.java
     public void setBody(byte[] body, Short contentType) throws CoapException {
         //this.body = body;
 
@@ -140,10 +143,10 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
         notifyChange(body, null, null, null, deliveryListener);
     }
 	
-	
+	/*
     public void setConfirmNotification(boolean confirmNotification) {
         this.setConNotifications(confirmNotification);
-    }
+    }*/
     //---------------------------------------------------------------------
 	//
 	//把timer 停止了, 如果只是server.destory 是不会把这个 resource的 Timer结束的

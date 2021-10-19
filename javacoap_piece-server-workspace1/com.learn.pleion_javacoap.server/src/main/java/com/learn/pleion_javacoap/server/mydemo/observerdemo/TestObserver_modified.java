@@ -34,12 +34,9 @@ public class TestObserver_modified {
 		CoapServer server = CoapServerBuilder.newBuilder().transport(5683)
                 .timeout(new SingleTimeout(500)).blockSize(BlockSize.S_128).build();
 	     */
-	    
 		//CoapServer server = CoapServer.builder().transport(5683).build();
 		CoapServer server = CoapServer.builder().transport(myuri1_port).build();
-
 		//
-		//MyObserverResource_Modified myobResc1 = new MyObserverResource_Modified("hlllloooo", server);
 		MyObserverResource_Modified myobResc1 = new MyObserverResource_Modified(server);
 		
 		
@@ -48,7 +45,7 @@ public class TestObserver_modified {
 		// 注意 这里的 hello 大小写是敏感的
 		// 因为 client那边 是根据 coap://localhost:5656/hello 来发送请求的
 		//server.add(new MyObserverResource("hello_observer"));
-		server.addRequestHandler("/hello_observer", myobResc1);
+		server.addRequestHandler(myuri1_path, myobResc1);
 		//server.setObservationHandler(myobResc1);
 		try {
 			server.start();
