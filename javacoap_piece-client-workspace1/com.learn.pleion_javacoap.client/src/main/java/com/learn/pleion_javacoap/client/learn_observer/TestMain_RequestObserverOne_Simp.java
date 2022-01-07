@@ -27,6 +27,7 @@ public class TestMain_RequestObserverOne_Simp {
 		String port3 = "coap://160.32.219.56:5657/hello";		//无线连接树莓派, 路由给的地址是192.168.50.179
 																// 我把它的192.168.50.179:5656 映射成160.32.219.56:5657
 		
+		//String 	myuri1_hostaddr   				= "135.0.237.84";
 		String 	myuri1_hostaddr   				= "localhost";
 		int 	myuri1_port 	  				= 5656;
 		String 	myuri1_path   					= "/hello_observer";

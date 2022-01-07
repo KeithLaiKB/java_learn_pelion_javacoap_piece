@@ -1,7 +1,13 @@
 package com.learn.pleion_javacoap.server.mydemo.observerdemo;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.Scanner;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.learn.pleion_javacoap.server.mydemo.observerdemo.myresc.MyObserverResource;
 import com.learn.pleion_javacoap.server.mydemo.observerdemo.myresc.MyObserverResource_Modified;
@@ -12,10 +18,25 @@ import com.mbed.coap.packet.Code;
 import com.mbed.coap.server.CoapServer;
 import com.mbed.coap.server.CoapServerBuilder;
 import com.mbed.coap.transmission.SingleTimeout;
+import com.mbed.coap.transport.CoapTransport;
 import com.mbed.coap.transport.InMemoryCoapTransport;
+import com.mbed.coap.transport.udp.DatagramSocketTransport;
 
-public class TestObserver_modified {
+public class TestObserver_modified_couldbedeleted {
 	public static void main(String[] args) {
+		 final Logger LOGGER = LoggerFactory.getLogger(TestObserver_modified_couldbedeleted.class.getName());
+		 /*
+		 LOGGER.
+		 
+		 
+		 Handler handlerObj = new ConsoleHandler();
+		 handlerObj.setLevel(Level.ALL);
+		 LOGGER.addHandler(handlerObj);
+		 LOGGER.setLevel(Level.ALL);
+		 LOGGER.setUseParentHandlers(false);
+		*/
+		
+		
 		// TODO Auto-generated method stub
 		//
 		String 	myuri1_hostaddr   				= "localhost";
@@ -26,6 +47,7 @@ public class TestObserver_modified {
 		
 	    SimpleObservableResource obsResource;
 
+	    //CoapTransport coapTransport = new SocketServerTransport(port, true);
 		// 如果不填参数，则默认端口是5683
 		// 这里我尝试自己定义一个端口5656
 	    //
@@ -36,9 +58,10 @@ public class TestObserver_modified {
 	     */
 		//CoapServer server = CoapServer.builder().transport(5683).build();
 	    // 直接 写 端口 时会出现socket closed, 所以需要 加上 InMemoryCoapTransport 
-		//CoapServer server = CoapServer.builder().transport(myuri1_port).build();
-	    CoapServer server = CoapServer.builder().transport(new InMemoryCoapTransport(myuri1_port)).build();
-	    
+		CoapServer server = CoapServer.builder().transport(myuri1_port).build();
+	    //CoapServer server = CoapServer.builder().transport(new InMemoryCoapTransport(myuri1_port)).build();
+	    //CoapServer server = CoapServer.builder().transport(new DatagramSocketTransport(myuri1_port)).build();
+	    //CoapServer server = CoapServer.builder().transport(0).build();
 	    //ref: SimpleObservableResourceTest
 	    // java-coap/coap-core/src/test/java/com/mbed/coap/observe/SimpleObservableResourceTest.java /
 	    //CoapServer server = CoapServerBuilder.newBuilder().transport(new InMemoryCoapTransport(myuri1_port)).timeout(new SingleTimeout(500)).build();
@@ -92,7 +115,10 @@ public class TestObserver_modified {
 			e1.printStackTrace();
 		}
 		*/
-		
+        System.out.println("enter to exit!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        Scanner in =new Scanner(System.in) ;
+        String absorbEnd = in.nextLine();
+        
 		//
 		myobResc1.stopMyResource();
 		com.mbed.coap.transport.udp.DatagramSocketTransport a;
@@ -119,11 +145,12 @@ public class TestObserver_modified {
 		// 可以详细追查到  DatagramSocketTransport 类中的
 		// DatagramSocketTransport a;
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(50000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("destroy the server and stop the resource timer finished!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.exit(0);
 	}
 }
