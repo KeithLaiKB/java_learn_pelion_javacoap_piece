@@ -37,7 +37,8 @@ public class TestObserver_modified {
 		//CoapServer server = CoapServer.builder().transport(5683).build();
 	    // 直接 写 端口 时会出现socket closed, 所以需要 加上 InMemoryCoapTransport 
 		//CoapServer server = CoapServer.builder().transport(myuri1_port).build();
-	    CoapServer server = CoapServer.builder().transport(new InMemoryCoapTransport(myuri1_port)).build();
+	    //CoapServer server = CoapServer.builder().transport(new InMemoryCoapTransport(myuri1_port)).build();
+		CoapServer server = CoapServer.builder().transport(myuri1_port).build();
 	    
 	    //ref: SimpleObservableResourceTest
 	    // java-coap/coap-core/src/test/java/com/mbed/coap/observe/SimpleObservableResourceTest.java /
@@ -80,10 +81,10 @@ public class TestObserver_modified {
 		// 所以我们 destroy 了server以后 , resource还是在运行的
 		// in my opinion, we should apply a standard process
 		// so we need to stop the resource
-		/*
 		try {
 			// ref:java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java
 			// 中的 terminateObservationByServerWithOkCode()
+			// 它 会 调用 client那边的 onTermination(CoapPacket obsPacket) 方法
 			//myobResc1.notifyTermination(Code.C204_CHANGED);
 			myobResc1.notifyTermination(Code.C404_NOT_FOUND);
 			System.out.println("notified termination");
@@ -91,7 +92,6 @@ public class TestObserver_modified {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		*/
 		
 		//
 		myobResc1.stopMyResource();
