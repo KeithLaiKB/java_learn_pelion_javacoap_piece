@@ -14,7 +14,15 @@ import com.mbed.coap.server.CoapServerBuilder;
 import com.mbed.coap.transmission.SingleTimeout;
 import com.mbed.coap.transport.InMemoryCoapTransport;
 
-public class TestObserver_modified {
+/**
+ * 这里测试 notifyTermination
+ * 只是增加 myobResc1.notifyTermination(Code.C404_NOT_FOUND); 来测试
+ * 然后 看到client那边的 onTermination 将会有反应 
+ * 
+ * @author laipl
+ *
+ */
+public class TestObserver_modified_useTermination {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//
@@ -46,8 +54,10 @@ public class TestObserver_modified {
 		//CoapServer server = CoapServerBuilder.newBuilder().transport(new InMemoryCoapTransport(myuri1_port)).build();
 	    //
 		MyObserverResource_Modified myobResc1 = new MyObserverResource_Modified(server);
-		//
-		//
+		
+		
+		
+		
 		// 注意 这里的 hello 大小写是敏感的
 		// 因为 client那边 是根据 coap://localhost:5656/hello 来发送请求的
 		//server.add(new MyObserverResource("hello_observer"));
@@ -62,22 +72,32 @@ public class TestObserver_modified {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		
 		//
 		// 停留一段时间 让server继续运行
 		try {
 			//Thread.sleep(30000);
-			Thread.sleep(30000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//
 		//
+
+		try {
+			// ref:java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java
+			// 中的 terminateObservationByServerWithOkCode()
+			// 它 会 调用 client那边的 onTermination(CoapPacket obsPacket) 方法
+			//myobResc1.notifyTermination(Code.C204_CHANGED);
+			myobResc1.notifyTermination(Code.C404_NOT_FOUND);
+			System.out.println("notified termination");
+		} catch (CoapException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		//
-		// 因为我们的resource用了 timer,
-		// 所以我们 destroy 了server以后 , resource还是在运行的
-		// in my opinion, we should apply a standard process
-		// so we need to stop the resource
 		myobResc1.stopMyResource();
 		com.mbed.coap.transport.udp.DatagramSocketTransport a;
 		//

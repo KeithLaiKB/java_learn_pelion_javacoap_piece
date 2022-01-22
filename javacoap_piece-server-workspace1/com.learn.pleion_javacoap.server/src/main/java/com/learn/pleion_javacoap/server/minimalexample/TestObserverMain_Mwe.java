@@ -1,8 +1,9 @@
-package com.learn.pleion_javacoap.server.mydemo.observerdemo;
+package com.learn.pleion_javacoap.server.minimalexample;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import com.learn.pleion_javacoap.server.minimalexample.myresc.MyObserverResource_Con_Mwe;
 import com.learn.pleion_javacoap.server.mydemo.observerdemo.myresc.MyObserverResource;
 import com.learn.pleion_javacoap.server.mydemo.observerdemo.myresc.MyObserverResource_Modified;
 import com.mbed.coap.exception.CoapException;
@@ -14,7 +15,7 @@ import com.mbed.coap.server.CoapServerBuilder;
 import com.mbed.coap.transmission.SingleTimeout;
 import com.mbed.coap.transport.InMemoryCoapTransport;
 
-public class TestObserver_modified {
+public class TestObserverMain_Mwe {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//
@@ -23,34 +24,12 @@ public class TestObserver_modified {
 		String 	myuri1_path   					= "/hello_observer";
 		
 		
-		
-	    SimpleObservableResource obsResource;
-
-		// 如果不填参数，则默认端口是5683
-		// 这里我尝试自己定义一个端口5656
-	    //
-	    // ref:java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java 
-	    /*
-		CoapServer server = CoapServerBuilder.newBuilder().transport(5683)
-                .timeout(new SingleTimeout(500)).blockSize(BlockSize.S_128).build();
-	     */
-		//CoapServer server = CoapServer.builder().transport(5683).build();
-	    // 直接 写 端口 时会出现socket closed, 所以需要 加上 InMemoryCoapTransport 
-		//CoapServer server = CoapServer.builder().transport(myuri1_port).build();
-	    //CoapServer server = CoapServer.builder().transport(new InMemoryCoapTransport(myuri1_port)).build();
+		// ref:java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java 
 		CoapServer server = CoapServer.builder().transport(myuri1_port).build();
-	    
-	    //ref: SimpleObservableResourceTest
-	    // java-coap/coap-core/src/test/java/com/mbed/coap/observe/SimpleObservableResourceTest.java /
-	    //CoapServer server = CoapServerBuilder.newBuilder().transport(new InMemoryCoapTransport(myuri1_port)).timeout(new SingleTimeout(500)).build();
-		//CoapServer server = CoapServerBuilder.newBuilder().transport(new InMemoryCoapTransport(myuri1_port)).build();
 	    //
-		MyObserverResource_Modified myobResc1 = new MyObserverResource_Modified(server);
-		//
-		//
+		MyObserverResource_Con_Mwe myobResc1 = new MyObserverResource_Con_Mwe(server);
 		// 注意 这里的 hello 大小写是敏感的
 		// 因为 client那边 是根据 coap://localhost:5656/hello 来发送请求的
-		//server.add(new MyObserverResource("hello_observer"));
 		server.addRequestHandler(myuri1_path, myobResc1);
 		//server.setObservationHandler(myobResc1);
 		try {
@@ -62,16 +41,17 @@ public class TestObserver_modified {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		
 		//
 		// 停留一段时间 让server继续运行
 		try {
 			//Thread.sleep(30000);
-			Thread.sleep(30000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//
+		
 		//
 		//
 		// 因为我们的resource用了 timer,
@@ -79,7 +59,6 @@ public class TestObserver_modified {
 		// in my opinion, we should apply a standard process
 		// so we need to stop the resource
 		myobResc1.stopMyResource();
-		com.mbed.coap.transport.udp.DatagramSocketTransport a;
 		//
 		// 再让Main函数 运行一段时间, 我们可以发现resource没有输出了, 也就意味着 确实结束了
 		// 其实 这后面的可以不用, 只是用来判断resource是否结束了,
@@ -96,12 +75,6 @@ public class TestObserver_modified {
 		// because the resource use the timer
 		server.stop();
 		
-		
-		// 留这个只是为了验证一下  控制台出现的一个warning socket closed 到底是不是error, 
-		// 跟stop之后立即结束程序是否有关
-		// 然后发现 它只是 底下抛出的一个提醒，并不是什么问题
-		// 可以详细追查到  DatagramSocketTransport 类中的
-		// DatagramSocketTransport a;
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {

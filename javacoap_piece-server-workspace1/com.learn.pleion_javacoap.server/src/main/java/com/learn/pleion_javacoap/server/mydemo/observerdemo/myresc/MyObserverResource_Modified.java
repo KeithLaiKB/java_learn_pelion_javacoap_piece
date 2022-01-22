@@ -63,9 +63,25 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 */
     
 	
+	/**
+	 * 当某个client第一次连接 这个resource的时候  会走一次 get(CoapExchange exchange), 
+	 * 但是后面就不经过这个get了
+	 * 注意 有意思的是 即使这里写了 setResponseBody("task used num:"+int_mytask_used)
+	 * 但  进行observe的那个client的 是无法获得 这个内容的  "task used num:"+int_mytask_used  
+	 * 
+	 * 但是值得注意的是, 这部分还是要写的因为
+	 * 
+	 * 假如数据从 1 2 3 4 5...开始发送
+	 * 第一次client 获取到的数据 "1"  是从 get这里返回的
+	 * 剩下的 2 3 4 5... 才是从notifyChange那里返回
+	 * 
+	 * 你可以用 两个client 尝试就好了
+	 * 
+	 */
 	@Override
 	public void get(CoapExchange exchange) throws CoapCodeException {
 		// TODO Auto-generated method stub
+		System.out.println("start get(CoapExchange exchange):");
 		int_connect_get_num = int_connect_get_num +1;
 		System.out.println("connect num: "+int_connect_get_num);
 		System.out.println("task used num: "+int_mytask_used);
@@ -74,7 +90,6 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		//exchange.setResponseBody("helllo, i am server");
 		//exchange.setResponseCode(Code.C205_CONTENT);
 		//
-		int_connect_get_num = int_connect_get_num +1;
 		//exchange.respond(ResponseCode.CONTENT, "task used num:"+int_mytask_used);
 		exchange.setResponseBody("task used num:"+int_mytask_used);
 		exchange.setResponseCode(Code.C205_CONTENT);

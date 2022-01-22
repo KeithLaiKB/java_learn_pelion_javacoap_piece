@@ -1,4 +1,4 @@
-package com.learn.pleion_javacoap.client.learn_observer;
+package com.learn.pleion_javacoap.client.learn_observer.concise;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import com.mbed.coap.exception.CoapException;
 import com.mbed.coap.packet.CoapPacket;
 import com.mbed.coap.transport.InMemoryCoapTransport;
 
-public class TestMain_RequestObserverOne_Simp {
+public class TestMain_RequestObserverOne_Modified {
 
 	
 	public static void main(String[] args) {
@@ -46,54 +46,21 @@ public class TestMain_RequestObserverOne_Simp {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		//
-
-		//
-		//Request req1 = new Request(null);
-		//req1.setToken(token);
-		
-
-
 		
 		CompletableFuture<CoapPacket> resp = null;
 		try {
-			resp = client.resource(myuri1_path).observe(new SyncObservationListener());
-			
-			/*
-			if(resp != null) {
-				try {
-					//这样 就相当于 又发送了一次get请求
-					System.out.println("kkkk:"+resp.get().getPayloadString());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			*/
-		} catch (CoapException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		/*
-		try {
-			CoapPacket resp = client.resource("/hello_observer").sync().observe(new SyncObservationListener());
-			if(resp != null) {
-				System.out.println("kkkk:"+resp.getPayloadString());
+			resp = client.resource(myuri1_path).observe(new MyObservationListener());
+			try {
+				System.out.println(resp.get().getPayloadString().toString());
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		} catch (CoapException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		*/
-		
-		// 你可以在server 那边的myresource 的get方法打个断点, 让server返回的慢一点
-		// 这样你就可以在client这边先看到 hello!!!! 先出现在server返回的playload之前了, 
-		// 也就是能够证明是异步了
-		System.out.println("hello!!!!!!!!!!!!!!!!!!!!!");
+
 		
 		//---------------------------------------------
 		// 因为 异步，是要等待回传的，等待是需要时间的，
@@ -121,31 +88,23 @@ public class TestMain_RequestObserverOne_Simp {
 	
 	}
 	
-	
-    public static class SyncObservationListener implements ObservationListener {
-
-        BlockingQueue<CoapPacket> queue = new LinkedBlockingQueue<>();
+	/**
+	 * ObservationListener
+	 * ref: java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java
+	 * 
+	 * @author laipl
+	 *
+	 */
+    public static class MyObservationListener implements ObservationListener {
 
         @Override
         public void onObservation(CoapPacket obsPacket) throws CoapException {
             System.out.println("ADD!!!!!!!"+obsPacket.getPayloadString());
-            queue.add(obsPacket);
-        }
-
-        public CoapPacket take() throws InterruptedException {
-            System.out.println("TAKE!!!!!!!");
-            return queue.poll(5, TimeUnit.SECONDS); // avoid test blocking
-            //            return queue.take();
-        }
-
-        public CoapPacket take(int timeout, TimeUnit timeUnit) throws InterruptedException {
-            return queue.poll(timeout, timeUnit);
         }
 
         @Override
         public void onTermination(CoapPacket obsPacket) throws CoapException {
         	System.out.println("term!!!!!!!"+obsPacket.getPayloadString());
-            queue.add(obsPacket);
         }
     }
 }

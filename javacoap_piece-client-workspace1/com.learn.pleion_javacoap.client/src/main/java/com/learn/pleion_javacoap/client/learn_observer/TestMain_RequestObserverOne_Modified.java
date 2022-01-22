@@ -17,7 +17,7 @@ import com.mbed.coap.exception.CoapException;
 import com.mbed.coap.packet.CoapPacket;
 import com.mbed.coap.transport.InMemoryCoapTransport;
 
-public class TestMain_RequestObserverOne_Simp {
+public class TestMain_RequestObserverOne_Modified {
 
 	
 	public static void main(String[] args) {
@@ -57,12 +57,12 @@ public class TestMain_RequestObserverOne_Simp {
 		
 		CompletableFuture<CoapPacket> resp = null;
 		try {
-			resp = client.resource(myuri1_path).observe(new SyncObservationListener());
+			resp = client.resource(myuri1_path).observe(new MyObservationListener());
 			
-			/*
+			
 			if(resp != null) {
 				try {
-					//这样 就相当于 又发送了一次get请求
+					//用来获取 第一次得到的数据
 					System.out.println("kkkk:"+resp.get().getPayloadString());
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -72,7 +72,7 @@ public class TestMain_RequestObserverOne_Simp {
 					e.printStackTrace();
 				}
 			}
-			*/
+			
 		} catch (CoapException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -121,31 +121,23 @@ public class TestMain_RequestObserverOne_Simp {
 	
 	}
 	
-	
-    public static class SyncObservationListener implements ObservationListener {
-
-        BlockingQueue<CoapPacket> queue = new LinkedBlockingQueue<>();
+	/**
+	 * ObservationListener
+	 * ref: java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java
+	 * 
+	 * @author laipl
+	 *
+	 */
+    public static class MyObservationListener implements ObservationListener {
 
         @Override
         public void onObservation(CoapPacket obsPacket) throws CoapException {
             System.out.println("ADD!!!!!!!"+obsPacket.getPayloadString());
-            queue.add(obsPacket);
-        }
-
-        public CoapPacket take() throws InterruptedException {
-            System.out.println("TAKE!!!!!!!");
-            return queue.poll(5, TimeUnit.SECONDS); // avoid test blocking
-            //            return queue.take();
-        }
-
-        public CoapPacket take(int timeout, TimeUnit timeUnit) throws InterruptedException {
-            return queue.poll(timeout, timeUnit);
         }
 
         @Override
         public void onTermination(CoapPacket obsPacket) throws CoapException {
         	System.out.println("term!!!!!!!"+obsPacket.getPayloadString());
-            queue.add(obsPacket);
         }
     }
 }
