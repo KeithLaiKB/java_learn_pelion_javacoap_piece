@@ -59,8 +59,7 @@ public class MyObserverResource_Con_Mwe extends AbstractObservableResource{
 	}
 	
 	/**
-	 * 这里面 每一次changed 代表, 要去通知所有的client
-	 * 则会调用handelGet
+	 * 这里面 每一次notifyChange 代表, 要去通知所有的client
 	 * 
 	 * @author laipl
 	 *

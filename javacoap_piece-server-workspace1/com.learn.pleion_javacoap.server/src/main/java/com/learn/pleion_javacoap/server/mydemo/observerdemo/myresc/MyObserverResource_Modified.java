@@ -66,8 +66,12 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 	/**
 	 * 当某个client第一次连接 这个resource的时候  会走一次 get(CoapExchange exchange), 
 	 * 但是后面就不经过这个get了
-	 * 注意 有意思的是 即使这里写了 setResponseBody("task used num:"+int_mytask_used)
-	 * 但  进行observe的那个client的 是无法获得 这个内容的  "task used num:"+int_mytask_used  
+	 * 注意 有意思的是
+	 * 这里写了 setResponseBody("task used num:"+int_mytask_used)
+	 * 对于 observe的那个client 只有第一次 observe的时候 会得到这个内容
+	 * 但对于 后续的 notification 
+	 * 那个client的 是无法获得 get() 里面这个内容的  "task used num:"+int_mytask_used  
+	 * 而那个client获得的是 notifyChange() 里面的内容
 	 * 
 	 * 但是值得注意的是, 这部分还是要写的因为
 	 * 
@@ -81,6 +85,8 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 	@Override
 	public void get(CoapExchange exchange) throws CoapCodeException {
 		// TODO Auto-generated method stub
+		System.out.println("--------------------------------------------------------------------");
+		System.out.println("--------- server side get(CoapExchange exchange) start -------------");
 		System.out.println("start get(CoapExchange exchange):");
 		int_connect_get_num = int_connect_get_num +1;
 		System.out.println("connect num: "+int_connect_get_num);
@@ -94,14 +100,16 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		exchange.setResponseBody("task used num:"+int_mytask_used);
 		exchange.setResponseCode(Code.C205_CONTENT);
 		exchange.sendResponse();
+		System.out.println("--------- server side get(CoapExchange exchange) end ---------------");
+		System.out.println("--------------------------------------------------------------------");
+
 	}
 	
 	
 	
 	
 	/**
-	 * 这里面 每一次changed 代表, 要去通知所有的client
-	 * 则会调用handelGet
+	 * 这里面 每一次notifyChange 代表, 要去通知所有的client
 	 * 
 	 * @author laipl
 	 *
