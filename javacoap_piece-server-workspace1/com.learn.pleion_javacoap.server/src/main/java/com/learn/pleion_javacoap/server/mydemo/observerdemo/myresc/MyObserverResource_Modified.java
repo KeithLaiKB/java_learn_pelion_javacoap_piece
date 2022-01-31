@@ -114,7 +114,7 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		//
 		exchange.setResponseBody("task used num:"+int_mytask_used);
         exchange.getResponseHeaders().setContentFormat(MediaTypes.CT_TEXT_PLAIN);
-		exchange.setResponseCode(Code.C205_CONTENT);
+		exchange.setResponseCode(Code.C205_CONTENT);								//如果不写这个也可以, 它在CoapPacket中的create response 自带 Code.C205_CONTENT
 		exchange.sendResponse();
 		System.out.println("--------- server side get(CoapExchange exchange) end ---------------");
 		System.out.println("--------------------------------------------------------------------");

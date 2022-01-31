@@ -85,24 +85,21 @@ public class TestMain_RequestObserverOne_Modified {
 		CompletableFuture<CoapPacket> resp = null;
 		try {
 			resp = client.resource(myuri1_path).observe(new MyObservationListener());
-			
-			
+			//
 			if(resp != null) {
-				try {
-					//用来获取 第一次得到的数据
-					System.out.println("kkkk:"+resp.get().getPayloadString());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				//用来获取 第一次得到的数据
+				System.out.println("kkkk:"+resp.get().getPayloadString());
 			}
-			
+			//
 		} catch (CoapException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		/*
