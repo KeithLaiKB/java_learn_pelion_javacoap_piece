@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
+import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -15,7 +16,11 @@ import com.mbed.coap.client.CoapClientBuilder;
 import com.mbed.coap.client.ObservationListener;
 import com.mbed.coap.exception.CoapException;
 import com.mbed.coap.packet.CoapPacket;
+import com.mbed.coap.packet.MessageType;
 import com.mbed.coap.transport.InMemoryCoapTransport;
+import com.mbed.coap.transport.TransportContext;
+import com.mbed.coap.transport.udp.DatagramSocketTransport;
+import com.mbed.coap.utils.Callback;
 
 public class TestMain_RequestObserverOne_Modified {
 
@@ -51,7 +56,29 @@ public class TestMain_RequestObserverOne_Modified {
 		//
 		//Request req1 = new Request(null);
 		//req1.setToken(token);
-		
+		 Callback<CoapPacket> myDeleteHandler = new Callback<CoapPacket>() {
+
+
+			@Override
+			public void call(CoapPacket t) {
+				// TODO Auto-generated method stub
+            	System.out.println("---------------------------------------------------");
+            	System.out.println("-------- delete handler onload start --------------");
+            	//System.out.println("result from server:" + t.isSuccess() );
+				//
+            	//System.out.println("on load: " + t.getResponseText());
+            	System.out.println("on load: " + t.getPayloadString());
+            	System.out.println("get code: " + t.getCode().name());
+            	System.out.println("---------- delete handler onload end --------------");
+            	System.out.println("---------------------------------------------------");
+			}
+
+			@Override
+			public void callException(Exception ex) {
+				// TODO Auto-generated method stub
+				System.out.println("callException!!!!!!");
+			}
+        };
 
 
 		
@@ -96,6 +123,160 @@ public class TestMain_RequestObserverOne_Modified {
 		System.out.println("hello!!!!!!!!!!!!!!!!!!!!!");
 		
 		//---------------------------------------------
+		
+		
+		//
+        //
+        //
+        Scanner in =new Scanner(System.in) ;
+        int int_choice = 0;
+        while(int_choice!=-1) {
+        	System.out.println("here is the choice:");
+        	System.out.println("-1: to exit");
+        	System.out.println("1: to delete");
+        	System.out.println("2: to reactiveCancel");
+        	System.out.println("3: to proactiveCancel");
+        	System.out.println("4: to observe again");
+        	System.out.println("enter the choice:");
+        	// input
+        	int_choice = in.nextInt();
+        	String str_absorbEnter = in.nextLine();
+        	if(int_choice==-1) {
+        		//System.exit(0);
+        		break;
+        	}
+        	/**
+        	 * delete这边 只是发送请求, 并不保证他那里必须会删除
+        	 */
+        	else if(int_choice==1) {
+        		//
+        		System.out.println("deleteing record");
+        		//System.out.println("deleting resources");
+        		//
+        		//
+        		// 我认为 delete 挺重要的 所以我这选择的是同步
+        		//client.delete();				// 用的是 同步, 对面没回应, 就不能继续往下走
+        		//client.resource(myuri1_path).delete(Callback.IGNORE); // 用的是 异步
+        		client.resource(myuri1_path).delete(myDeleteHandler);
+        		//
+        		// 注意 这个delete 
+        		// 可以是让 	服务器删除 这个资源
+        		// 也可以是让	服务器删除 某个记录(比如server那边 连了个数据库)
+        		// 这取决于 server 那边的 handleDelete 里的操作
+        		//
+        		// 如果 是让服务器删除 这个资源
+        		// 以后 client 不会再收到这个resource的内容, 但是 server还是在运行 
+        		// 所以server那边需要 把timer关掉, 此外还有可能要 remove(Resource resource)
+        		//
+        		//
+        		//System.out.println("deleted resources");
+        		//System.out.println("deleted record");
+        	}
+        	/**
+        	 * 暂时找不到 reactiveCancel功能的api
+        	 * 
+        	 */
+        	else if(int_choice==2) {
+        		
+        		// ref https://datatracker.ietf.org/doc/html/rfc7641#section-3.6
+        		// When the server then
+        		//  sends the next notification, the client will not recognize the token
+        		//  in the message and thus will return a Reset message
+        		//
+        		// in order words it means
+        		// send a RST when next notification arrives
+        		// 
+        		// 也就是 说 等到下一次 server发送 Notification过来的时候 
+        		// 这个subscriber 才发送 RST给server 来取消观察这个消息
+        		//resp.cancel(true);				//取消观察状态
+        		/*
+        		// ref : java-coap/coap-core/src/main/java/com/mbed/coap/client/ObservationHandlerImpl.java
+                CoapPacket resetResponse = new CoapPacket(t.getRemoteAddress());
+                resetResponse.setMessageType(MessageType.Reset);
+                resetResponse.setMessageId(t.getRequest().getMessageId());
+                */
+        		/*
+        		// ref: java-coap/coap-core/src/test/java/protocolTests/ClientServerNONTest.java
+                CoapPacket badReq = new CoapPacket(Code.C404_NOT_FOUND, MessageType.NonConfirmable, serverAddr);
+                badReq.setToken("1".getBytes());
+
+                CoapPacket resp1 = client.makeRequest(badReq).get();
+                */
+        		CoapPacket resetResponse = new CoapPacket(inetSocketAddr);
+        		resetResponse.setMessageType(MessageType.Reset);
+        		//resetResponse.
+        		//resp.get().createResponse(Code.)
+        		
+        		InetSocketAddress a1 = new InetSocketAddress(myuri1_hostaddr,myuri1_port);
+        		DatagramSocketTransport trans = new DatagramSocketTransport(0);
+        		try {
+					trans.sendPacket0(resetResponse, inetSocketAddr, TransportContext.NULL);
+				} catch (CoapException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		//client.resource(myuri1_path).payload(payload)
+        		
+        		/*
+        		try {
+        			//CoapPacket cpTmp1 = resp.get().createResponse();
+        			//cpTmp1.setMessageType(MessageType.Reset);
+        			//resp.get().createResponse().
+        			
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
+        		System.out.println("reactiveCancel");
+        		
+        	}
+        	/**
+        	 * 暂时找不到proactiveCancel功能的api
+        	 * 
+        	 */
+        	else if(int_choice==3) {
+
+        		// ref https://datatracker.ietf.org/doc/html/rfc7641#section-3.6
+        		// In some circumstances, it may be desirable to cancel an observation
+        		//   and release the resources allocated by the server to it more eagerly.
+        		//   In this case, a client MAY explicitly deregister by issuing a GET
+        		//   request that has the Token field set to the token of the observation
+        		//   to be cancelled and includes an Observe Option with the value set to
+        		//   1 (deregister)
+        		//
+        		// in order words it means
+        		// send another cancellation request, with an Observe Option set to 1 (deregister)
+        		// 
+        		// 也就是 说  	不必 		等到下一次 server发送 Notification过来的时候,  这个subscriber 才发送 RST给server 来取消观察这个消息
+        		// 而是直接	发送 一个 get请求	给server 来取消观察这个消息 
+        		//coapObRelation1.proactiveCancel();				//取消观察状态
+        		System.out.println("proactiveCancel");
+        	}
+        	else if(int_choice==4) {
+        		try {
+					resp = client.resource(myuri1_path).observe(new MyObservationListener());
+				} catch (CoapException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} //取消观察状态后 还是可以继续observe的
+        		System.out.println("observe again");
+        	}
+        }
+        //
+        //---------------------------------------------
+        in.close();
+		
+		
+		
+		
+		
+		/*
 		// 因为 异步，是要等待回传的，等待是需要时间的，
 		// 所以 我不能让程序那么快结束
 		// 所以 我让你输入回车再结束，也就是说 你不输入回车，那么这个总main函数没走完
@@ -116,7 +297,7 @@ public class TestMain_RequestObserverOne_Modified {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("CANCELLATION FINISHED");
+		System.out.println("CANCELLATION FINISHED");*/
 		client.close();
 	
 	}

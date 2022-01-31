@@ -13,6 +13,18 @@ import com.mbed.coap.packet.MediaTypes;
 import com.mbed.coap.server.CoapExchange;
 import com.mbed.coap.server.CoapServer;
 
+/**
+ * 如果coap client 那边断了, 这边会有一段时间说 类似
+ *  Could not deliver notification to /127.0.0.1:60775, previous still not confirmed
+ * 然后一段时间后
+ * Observation removed [#1169 /127.0.0.1:60775]
+ * Notification response timeout: /127.0.0.1:60775
+ * 
+ * 然后我猜这个 client 就不在observation 里面了
+ * 
+ * @author laipl
+ *
+ */
 public class MyObserverResource_Modified extends AbstractObservableResource{
 
 	Timer timer = null;
@@ -24,7 +36,8 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		// TODO Auto-generated constructor stub
 		//
 		//
-		this.setConNotifications(false);		// configure the notification type to NONs, 如果不写这个默认的是 CON
+		//this.setConNotifications(false);		// configure the notification type to NONs, 如果不写这个默认的是 CON
+		this.setConNotifications(true);	
 		//----------------------------------------
 		//
 		// schedule a periodic update task, otherwise let events call changed()
@@ -106,8 +119,24 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 	}
 	
 	
-	
-	
+	/**
+	 * ref: java-coap/coap-core/src/test/java/com/mbed/coap/server/ServerIntegrationTest.java
+	 * 暂时发现好像并没有像 californium那样 有一个 coapResource 自己的 delete的方法
+	 *
+	 */
+    @Override
+    public void delete(CoapExchange exchange) throws CoapCodeException {
+        //payload = "";
+        //contentType = 0;
+    	//delete(exchange);
+    	/*
+    	exchange.setResponseBody("ideleted");
+        exchange.setResponseCode(Code.C202_DELETED);
+        exchange.sendResponse();
+        */
+    	
+        //super.delete(exchange);
+    }
 	/**
 	 * 这里面 每一次notifyChange 代表, 要去通知所有的client
 	 * 

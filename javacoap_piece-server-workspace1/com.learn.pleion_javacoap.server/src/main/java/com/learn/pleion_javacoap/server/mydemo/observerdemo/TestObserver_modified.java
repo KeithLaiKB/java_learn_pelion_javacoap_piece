@@ -66,7 +66,7 @@ public class TestObserver_modified {
 		// 停留一段时间 让server继续运行
 		try {
 			//Thread.sleep(30000);
-			Thread.sleep(30000);
+			Thread.sleep(300000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
