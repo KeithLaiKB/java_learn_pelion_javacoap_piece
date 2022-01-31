@@ -105,17 +105,19 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		int_connect_get_num = int_connect_get_num +1;
 		System.out.println("connect num: "+int_connect_get_num);
 		System.out.println("task used num: "+int_mytask_used);
-		
-		
 		//exchange.setResponseBody("helllo, i am server");
 		//exchange.setResponseCode(Code.C205_CONTENT);
 		//
 		//exchange.respond(ResponseCode.CONTENT, "task used num:"+int_mytask_used);
 		//
 		exchange.setResponseBody("task used num:"+int_mytask_used);
-        exchange.getResponseHeaders().setContentFormat(MediaTypes.CT_TEXT_PLAIN);
-		exchange.setResponseCode(Code.C205_CONTENT);								//如果不写这个也可以, 它在CoapPacket中的create response 自带 Code.C205_CONTENT
+        exchange.getResponseHeaders().setContentFormat(MediaTypes.CT_TEXT_PLAIN);	// 如果不写这个也可以, 默认为0 , 
+        																			// 因为在BasicHeaderOptions 的  hashCode()中
+        																			// hash = 41 * hash + (this.contentFormat != null ? this.contentFormat.hashCode() : 0);
+        System.out.println(MediaTypes.contentFormatToString(exchange.getResponseHeaders().getContentFormat()));
+		exchange.setResponseCode(Code.C205_CONTENT);								// 如果不写这个也可以, 它在CoapPacket中的create response 自带 Code.C205_CONTENT
 		exchange.sendResponse();
+		
 		System.out.println("--------- server side get(CoapExchange exchange) end ---------------");
 		System.out.println("--------------------------------------------------------------------");
 
@@ -156,6 +158,11 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 			//changed(); // notify all observers
 			//((AbstractObservableResource)(MyObserverResource_Modified.this)).notifyChange(new String("kalloooo!"+int_mytask_used).getBytes(),Code.C205_CONTENT);
 			//MyObserverResource_Modified.this.mynotifyChange(new String("kalloooo!"+int_mytask_used).getBytes(CoapConstants.DEFAULT_CHARSET),MediaTypes.CT_TEXT_PLAIN);
+			//
+			//
+			// 记得 这里 如果修改了 content type 记得看一下 你需不需要把get也改了
+			// 因为 client 去 observe, 它所获得的第一条信息 是来自于 get(CoapExchange exchange) 方法
+			// 而不是这里这个方法
 			myNotifyChange(new String("kalloooo!"+int_mytask_used).getBytes(CoapConstants.DEFAULT_CHARSET),MediaTypes.CT_TEXT_PLAIN);
 		}
 	}
@@ -166,6 +173,8 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 	public void myNotifyChange(byte[] bytes, Short c205Content) {
 		// TODO Auto-generated method stub
 		try {
+			// content format 在 notify change里面 java coap中是需要指定的 
+			// 例如 MediaTypes.CT_TEXT_PLAIN 或 MediaTypes.CT_APPLICATION_JSON之类的
 			notifyChange(bytes, c205Content);
 		} catch (CoapException e) {
 			// TODO Auto-generated catch block

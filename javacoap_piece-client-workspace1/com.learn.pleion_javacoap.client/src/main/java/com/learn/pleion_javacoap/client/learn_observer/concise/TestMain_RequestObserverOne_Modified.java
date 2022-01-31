@@ -15,6 +15,7 @@ import com.mbed.coap.client.CoapClientBuilder;
 import com.mbed.coap.client.ObservationListener;
 import com.mbed.coap.exception.CoapException;
 import com.mbed.coap.packet.CoapPacket;
+import com.mbed.coap.packet.MediaTypes;
 import com.mbed.coap.transport.InMemoryCoapTransport;
 
 public class TestMain_RequestObserverOne_Modified {
@@ -105,7 +106,9 @@ public class TestMain_RequestObserverOne_Modified {
 
         @Override
         public void onObservation(CoapPacket obsPacket) throws CoapException {
-            System.out.println("ADD!!!!!!!"+obsPacket.getPayloadString());
+        	String mediaTypesTmp = MediaTypes.contentFormatToString(obsPacket.headers().getContentFormat());
+            System.out.println("ADD!!!!!!!"+obsPacket.getPayloadString()+","+obsPacket.headers().getContentFormat()+mediaTypesTmp);
+            
         }
 
         @Override
