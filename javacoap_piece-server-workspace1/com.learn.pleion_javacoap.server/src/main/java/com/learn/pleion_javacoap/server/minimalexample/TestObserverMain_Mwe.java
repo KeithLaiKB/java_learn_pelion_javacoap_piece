@@ -19,7 +19,7 @@ public class TestObserverMain_Mwe {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		//
-		String 	myuri1_hostaddr   				= "localhost";
+		//String 	myuri1_hostaddr   				= "localhost";
 		int 	myuri1_port 	  				= 5656;
 		String 	myuri1_path   					= "/hello_observer";
 		

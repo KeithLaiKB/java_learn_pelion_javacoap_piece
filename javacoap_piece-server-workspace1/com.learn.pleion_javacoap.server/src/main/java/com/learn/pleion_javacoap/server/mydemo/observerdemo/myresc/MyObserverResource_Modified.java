@@ -94,6 +94,7 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 	 * 
 	 * 你可以用 两个client 尝试就好了
 	 * 
+	 * ref: java-coap/coap-core/src/test/java/com/mbed/coap/server/ServerIntegrationTest.java
 	 */
 	@Override
 	public void get(CoapExchange exchange) throws CoapCodeException {
@@ -110,7 +111,9 @@ public class MyObserverResource_Modified extends AbstractObservableResource{
 		//exchange.setResponseCode(Code.C205_CONTENT);
 		//
 		//exchange.respond(ResponseCode.CONTENT, "task used num:"+int_mytask_used);
+		//
 		exchange.setResponseBody("task used num:"+int_mytask_used);
+        exchange.getResponseHeaders().setContentFormat(MediaTypes.CT_TEXT_PLAIN);
 		exchange.setResponseCode(Code.C205_CONTENT);
 		exchange.sendResponse();
 		System.out.println("--------- server side get(CoapExchange exchange) end ---------------");

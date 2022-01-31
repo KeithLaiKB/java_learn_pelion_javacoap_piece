@@ -40,10 +40,15 @@ public class MyObserverResource_Con_Mwe extends AbstractObservableResource{
 		timer.schedule(new UpdateTask(),0, 5000);
 	}
     
-	
+	/**
+	 * ref: java-coap/coap-core/src/test/java/com/mbed/coap/server/ServerIntegrationTest.java
+	 */
 	@Override
 	public void get(CoapExchange exchange) throws CoapCodeException {
 		// TODO Auto-generated method stub
+		System.out.println("--------------------------------------------------------------------");
+		System.out.println("--------- server side get(CoapExchange exchange) start -------------");
+		System.out.println("start get(CoapExchange exchange):");
 		int_connect_get_num = int_connect_get_num +1;
 		System.out.println("connect num: "+int_connect_get_num);
 		System.out.println("task used num: "+int_mytask_used);
@@ -53,9 +58,13 @@ public class MyObserverResource_Con_Mwe extends AbstractObservableResource{
 		//exchange.setResponseCode(Code.C205_CONTENT);
 		//
 		//exchange.respond(ResponseCode.CONTENT, "task used num:"+int_mytask_used);
+		//
 		exchange.setResponseBody("task used num:"+int_mytask_used);
+        exchange.getResponseHeaders().setContentFormat(MediaTypes.CT_TEXT_PLAIN);
 		exchange.setResponseCode(Code.C205_CONTENT);
 		exchange.sendResponse();
+		System.out.println("--------- server side get(CoapExchange exchange) end ---------------");
+		System.out.println("--------------------------------------------------------------------");
 	}
 	
 	/**
