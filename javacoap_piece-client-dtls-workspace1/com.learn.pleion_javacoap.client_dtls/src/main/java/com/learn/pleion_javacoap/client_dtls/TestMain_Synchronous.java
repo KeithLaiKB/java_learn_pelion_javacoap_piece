@@ -1,4 +1,4 @@
-package com.learn.pleion_javacoap.client;
+package com.learn.pleion_javacoap.client_dtls;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

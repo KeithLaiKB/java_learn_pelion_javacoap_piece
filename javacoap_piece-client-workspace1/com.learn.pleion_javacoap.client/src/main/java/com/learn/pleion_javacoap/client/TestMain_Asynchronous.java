@@ -10,7 +10,15 @@ import com.mbed.coap.client.CoapClientBuilder;
 import com.mbed.coap.exception.CoapException;
 import com.mbed.coap.packet.CoapPacket;
 import com.mbed.coap.utils.Callback;
-
+/**
+ * 
+ * 
+ * @author laipl
+ *
+ *	asynchronous, 就算是消息还没来,它也可以输出hello!!!
+ *
+ *
+ */
 public class TestMain_Asynchronous {
 	public static void main(String[] args) {
 		// 如果想要ctrl+鼠标右键看更多信息, 它貌似看不了, 
