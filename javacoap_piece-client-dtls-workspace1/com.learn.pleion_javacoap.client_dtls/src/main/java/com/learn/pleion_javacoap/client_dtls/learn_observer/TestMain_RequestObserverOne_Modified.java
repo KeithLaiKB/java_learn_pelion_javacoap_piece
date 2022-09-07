@@ -43,6 +43,7 @@ public class TestMain_RequestObserverOne_Modified {
                 .transport(new InMemoryCoapTransport())
                 .timeout(1000).build();
 		*/
+		// ref: java-coap/coap-core/src/test/java/protocolTests/ObservationTest.java
 		InetSocketAddress inetSocketAddr = new InetSocketAddress(myuri1_hostaddr,myuri1_port);
 		CoapClient client=null;
 		try {
