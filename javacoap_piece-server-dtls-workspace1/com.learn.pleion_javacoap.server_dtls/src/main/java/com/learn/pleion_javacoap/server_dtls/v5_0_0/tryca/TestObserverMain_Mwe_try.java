@@ -28,7 +28,11 @@ import com.learn.pleion_javacoap.server_dtls.v5_0_0.myresc.MyObserverResource_Co
 import com.mbed.coap.server.CoapServer;
 import com.mbed.coap.transport.javassl.CoapSerializer;
 
-
+/**
+ * ref:https://loneidealist.medium.com/generating-signing-certificates-with-openssl-and-converting-to-java-key-store-jks-3c8185dbf8fe
+ * @author laipl
+ *
+ */
 
 public class TestObserverMain_Mwe_try {
 
