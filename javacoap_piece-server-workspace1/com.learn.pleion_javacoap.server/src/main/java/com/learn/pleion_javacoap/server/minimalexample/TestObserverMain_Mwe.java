@@ -20,7 +20,7 @@ public class TestObserverMain_Mwe {
 		// TODO Auto-generated method stub
 		//
 		//String 	myuri1_hostaddr   				= "localhost";
-		int 	myuri1_port 	  				= 5656;
+		int 	myuri1_port 	  				= 5683;					//5656
 		String 	myuri1_path   					= "/hello_observer";
 		
 		
@@ -46,7 +46,7 @@ public class TestObserverMain_Mwe {
 		// 停留一段时间 让server继续运行
 		try {
 			//Thread.sleep(30000);
-			Thread.sleep(10000);
+			Thread.sleep(30000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

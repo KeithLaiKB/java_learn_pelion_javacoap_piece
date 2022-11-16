@@ -30,7 +30,7 @@ public class TestMain_RequestObserverOne_Modified {
 		
 		//String 	myuri1_hostaddr   				= "135.0.237.84";
 		String 	myuri1_hostaddr   				= "localhost";
-		int 	myuri1_port 	  				= 5656;
+		int 	myuri1_port 	  				= 5683;			//5656
 		String 	myuri1_path   					= "/hello_observer";
 		
 		//CoapClient client2 = new CoapClient(port1);

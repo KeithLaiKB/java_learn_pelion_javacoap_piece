@@ -32,6 +32,7 @@ import com.mbed.coap.transport.javassl.CoapSerializer;
  * ref:https://loneidealist.medium.com/generating-signing-certificates-with-openssl-and-converting-to-java-key-store-jks-3c8185dbf8fe
  * @author laipl
  *
+ * ok
  */
 
 public class TestObserverMain_Mwe_try {
