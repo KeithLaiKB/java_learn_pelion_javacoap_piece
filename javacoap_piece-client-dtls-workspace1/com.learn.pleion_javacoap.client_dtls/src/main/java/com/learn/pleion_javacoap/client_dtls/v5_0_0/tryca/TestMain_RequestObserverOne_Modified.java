@@ -186,7 +186,7 @@ public class TestMain_RequestObserverOne_Modified {
 			//ref: https://datatracker.ietf.org/doc/html/rfc6347
 			// This document updates
 			// DTLS 1.0 to work with TLS version 1.2.
-			context = SSLContext.getInstance("TLSv1.2");
+			context = SSLContext.getInstance("TLSv1.3");
 			
 			//context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 			//context.init(null,tmf.getTrustManagers(), new java.security.SecureRandom());

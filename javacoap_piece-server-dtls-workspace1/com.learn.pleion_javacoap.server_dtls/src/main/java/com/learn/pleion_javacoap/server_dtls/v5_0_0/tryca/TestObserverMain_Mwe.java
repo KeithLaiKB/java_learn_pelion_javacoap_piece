@@ -24,7 +24,15 @@ import com.mbed.coap.server.CoapServer;
 import com.mbed.coap.transport.javassl.CoapSerializer;
 
 
-
+/**
+ * 
+ * 
+ * @author laipl
+ *
+ * 暂时不OK
+ * 这用的是key
+ *
+ */
 public class TestObserverMain_Mwe {
 
 	
@@ -33,7 +41,7 @@ public class TestObserverMain_Mwe {
 		// TODO Auto-generated method stub
 		//
 		//String 	myuri1_hostaddr   				= "localhost";
-		int 	myuri1_port 	  				= 5656;
+		int 	myuri1_port 	  				= 5684;
 		String 	myuri1_path   					= "/hello_observer";
 		
 		
@@ -130,7 +138,7 @@ public class TestObserverMain_Mwe {
 		SSLSocketFactory mysocketFactory=null;
 		try {
 			//context = SSLContext.getInstance("SSL");
-			context = SSLContext.getInstance("TLSv1.3");
+			context = SSLContext.getInstance("TLSv1.2");
 			
 			//context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
 			//context.init(null,tmf.getTrustManagers(), new java.security.SecureRandom());
