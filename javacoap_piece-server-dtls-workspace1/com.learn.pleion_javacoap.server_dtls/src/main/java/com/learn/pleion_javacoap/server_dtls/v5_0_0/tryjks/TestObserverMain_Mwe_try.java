@@ -24,7 +24,17 @@ import com.mbed.coap.server.CoapServer;
 import com.mbed.coap.transport.javassl.CoapSerializer;
 
 
-
+/**
+ * 
+ * 
+ * 
+ * @author laipl
+ *
+ * 这里用这个 null
+ * context.init(null, tmf.getTrustManagers(), new java.security.SecureRandom());
+ * 但是好像不Ok
+ *
+ */
 public class TestObserverMain_Mwe_try {
 
 	
