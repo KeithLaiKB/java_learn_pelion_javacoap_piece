@@ -14,14 +14,15 @@ public class TestMain_Simple {
 		// 它需要你去把github源码下载下来, 然后external folder过去 
 		CoapClient client=null;
 		try {
-			InetSocketAddress inetSocketAddr = new InetSocketAddress("localhost",5683);
+			InetSocketAddress inetSocketAddr = new InetSocketAddress("192.168.239.137",5683);
 			client = CoapClientBuilder.newBuilder(inetSocketAddr).build();
 	        //
 	        //CoapResponse response;
 			//
 			//response = client.get();
 			//String xml = client.get(MediaTypeRegistry.APPLICATION_XML).getResponseText();
-	        CoapPacket coapResp = client.resource("/obs").sync().get();
+	        //CoapPacket coapResp = client.resource("/obs").sync().get();
+	        CoapPacket coapResp = client.resource("/hello").sync().get();
 	        // 
 	        //
 	        //

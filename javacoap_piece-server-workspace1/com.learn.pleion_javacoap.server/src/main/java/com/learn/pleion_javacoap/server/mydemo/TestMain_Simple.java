@@ -15,7 +15,8 @@ public class TestMain_Simple {
 		MyResource myobResc1 = new MyResource();
 		//------------------------operate server-------------------------------------
 		//
-		server.addRequestHandler("/obs", myobResc1);
+		//server.addRequestHandler("/obs", myobResc1);
+		server.addRequestHandler("/hello", myobResc1);
 		//
 		//
 		try {
