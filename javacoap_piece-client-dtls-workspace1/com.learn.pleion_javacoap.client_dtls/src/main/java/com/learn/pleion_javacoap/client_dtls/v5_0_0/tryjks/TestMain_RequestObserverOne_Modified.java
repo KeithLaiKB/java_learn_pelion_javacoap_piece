@@ -48,7 +48,7 @@ public class TestMain_RequestObserverOne_Modified {
 		
 		//String 	myuri1_hostaddr   				= "135.0.237.84";
 		String 	myuri1_hostaddr   				= "localhost";
-		int 	myuri1_port 	  				= 5656;
+		int 	myuri1_port 	  				= 5684;
 		String 	myuri1_path   					= "/hello_observer";
 		
 		
@@ -200,12 +200,23 @@ public class TestMain_RequestObserverOne_Modified {
 			e1.printStackTrace();
 		}
 		*/
+		//
+		// ref:java-coap/coap-core/src/test/java/com/mbed/coap/transport/javassl/SSLSocketClientTransportTest.java
 		InetSocketAddress inetSocketAddr = new InetSocketAddress(myuri1_hostaddr,myuri1_port);
 		CoapClient client = null;
 		try {
+			//这里的coapserver 主要是为了 让coapclient 知道 
+			/*
 			client = CoapClientBuilder.clientFor(inetSocketAddr,
 			        CoapServer.builder().transport(new SSLSocketClientTransport(inetSocketAddr, context.getSocketFactory(), CoapSerializer.UDP, false)).build().start()
-			);
+			);*/
+			//改写为
+			CoapServer coapserver_target=CoapServer.builder().transport(new SSLSocketClientTransport(inetSocketAddr, context.getSocketFactory(), CoapSerializer.UDP, false)).build();		
+			//client = CoapClientBuilder.clientFor(inetSocketAddr,coapserver_target);				// 这样还是不行的
+			client = CoapClientBuilder.clientFor(inetSocketAddr,coapserver_target.start()); 		// 需要start才可以, 我其实一直很奇怪, 它在这start, 
+																									// 所以我会有疑问 如果server那边也start 那岂不是有两个server,但是 运行的时候又不是这样的, 
+																									// 所以暂时我不理了, 反正跟着demo来的
+			
 		} catch (IllegalStateException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
